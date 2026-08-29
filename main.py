@@ -19,12 +19,13 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from analyzer import extract_text, analyze_resume, generate_cover_letter
 
-app = FastAPI(title="AI Resume Analyzer")
-
-UPLOAD_DIR = "uploads"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = "/tmp/uploads" if os.environ.get("VERCEL") else os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app = FastAPI(title="AI Resume Analyzer")
+
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 
 class CoverLetterRequest(BaseModel):
@@ -36,13 +37,15 @@ class CoverLetterRequest(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    with open(os.path.join("templates", "index.html"), "r", encoding="utf-8") as f:
+    template_path = os.path.join(BASE_DIR, "templates", "index.html")
+    with open(template_path, "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def robots():
     return "User-agent: *\nAllow: /\n"
+
 
 
 @app.get("/sitemap.xml", response_class=PlainTextResponse)
