@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Analyzer - Free Online ATS Score Checker & Skill Gap Detector</title>
+  
+  <!-- SEO Meta Tags for Google Search -->
+  <meta name="description" content="Free AI Resume Analyzer & Smart ATS Score Checker. Upload your PDF/DOCX resume to calculate match percentages, uncover missing skill gaps, audit power action verbs, and generate tailored cover letters.">
+  <meta name="keywords" content="AI resume analyzer, ATS resume checker, free ATS score, resume skill gap, resume optimizer, ATS keyword checker, AI cover letter generator">
+  <meta name="author" content="AI Resume Analyzer">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AI Resume Analyzer - Free Smart ATS & Skill Gap Detector">
+  <meta property="og:description" content="Optimize your resume for dream jobs. Get instant ATS scores, missing keywords, bullet point rewrites, and AI cover letters.">
+  
+  <!-- Google Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AI Resume Analyzer",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "All",
+    "description": "Free AI Resume Analyzer & Smart ATS Score Checker. Upload PDF/DOCX resumes for instant skill gap analysis, ATS scoring, and AI recommendations."
+  }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Ambient Background Glows -->
+  <div class="glow-sphere glow-1"></div>
+  <div class="glow-sphere glow-2"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg border-bottom sticky-top glass-nav">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <div class="brand-icon">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <span class="brand-text">Resume<span class="gradient-text">AI</span></span>
+        <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle ms-2 px-2 py-1 fs-xs">v2.0</span>
+      </a>
+
+      <div class="d-flex align-items-center gap-2">
+        <button id="themeToggleBtn" class="btn btn-outline-secondary btn-icon" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+          <i class="fa-solid fa-moon theme-icon-dark"></i>
+          <i class="fa-solid fa-sun theme-icon-light d-none"></i>
+        </button>
+        <a href="#howItWorksModal" data-bs-toggle="modal" class="btn btn-outline-primary btn-sm d-none d-sm-inline-flex align-items-center gap-1">
+          <i class="fa-solid fa-circle-question"></i> How it works
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="py-5 text-center position-relative">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill hero-chip mb-3">
+            <span class="pulse-dot"></span>
+            <span class="fs-sm fw-medium">Intelligent ATS & Skill Gap Matcher</span>
+          </div>
+          <h1 class="display-5 fw-extrabold mb-3 tracking-tight">
+            Optimize Your Resume for <br class="d-none d-md-block">
+            <span class="gradient-text">Dream Job Opportunities</span>
+          </h1>
+          <p class="lead text-secondary mb-4 mx-auto hero-desc">
+            Upload your resume and compare it against any target job description. Uncover missing keywords, match percentages, and actionable ATS tips in seconds.
+          </p>
+
+          <!-- Feature Badges -->
+          <div class="d-flex flex-wrap justify-content-center gap-3 pt-2">
+            <div class="feature-pill"><i class="fa-solid fa-bolt text-warning"></i> Instant Skill Parsing</div>
+            <div class="feature-pill"><i class="fa-solid fa-bullseye text-danger"></i> ATS Match Gauge</div>
+            <div class="feature-pill"><i class="fa-solid fa-chart-pie text-info"></i> Skill Gap Matrix</div>
+            <div class="feature-pill"><i class="fa-solid fa-shield-halved text-success"></i> 100% Private & Secure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container pb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-9">
+
+        <!-- Form Card -->
+        <div class="card glass-card shadow-lg border-0 mb-4" id="inputCard">
+          <div class="card-body p-4 p-md-5">
+            <form id="analyzeForm" novalidate>
+              <div class="row g-4">
+                
+                <!-- Resume Upload Zone (Left Column on large) -->
+                <div class="col-md-6">
+                  <label class="form-label fw-bold d-flex justify-content-between align-items-center">
+                    <span><i class="fa-solid fa-file-arrow-up text-primary me-2"></i>1. Upload Resume</span>
+                    <span class="badge bg-secondary-subtle text-secondary fs-xs">PDF or DOCX</span>
+                  </label>
+                  
+                  <!-- Drag and Drop Area -->
+                  <div class="dropzone-area text-center" id="dropZone">
+                    <input type="file" id="resumeFile" class="file-input-hidden" accept=".pdf,.docx" required>
+                    
+                    <div id="dropZonePrompt" class="py-4">
+                      <div class="upload-icon-wrapper mb-3 mx-auto">
+                        <i class="fa-solid fa-cloud-arrow-up text-primary fs-3"></i>
+                      </div>
+                      <h6 class="fw-bold mb-1">Drag & drop your resume here</h6>
+                      <p class="text-secondary fs-sm mb-3">or <span class="text-primary text-decoration-underline browse-link">browse files</span> from your computer</p>
+                      <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-body-tertiary text-secondary border fs-xs"><i class="fa-solid fa-file-pdf text-danger me-1"></i>.PDF</span>
+                        <span class="badge bg-body-tertiary text-secondary border fs-xs"><i class="fa-solid fa-file-word text-primary me-1"></i>.DOCX</span>
+                      </div>
+                    </div>
+
+                    <!-- Active File Info Display -->
+                    <div id="fileInfoBox" class="file-info-box d-none text-start p-3">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3 overflow-hidden">
+                          <div class="file-type-icon" id="fileTypeIcon">
+                            <i class="fa-solid fa-file-pdf text-danger fs-3"></i>
+                          </div>
+                          <div class="overflow-hidden">
+                            <h6 class="mb-0 text-truncate fw-semibold" id="fileNameDisplay">resume.pdf</h6>
+                            <span class="text-secondary fs-xs" id="fileSizeDisplay">245 KB</span>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-icon" id="removeFileBtn" title="Remove file">
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-text fs-xs text-secondary mt-2">
+                    <i class="fa-solid fa-lock me-1"></i> Your resume is processed strictly for this analysis and deleted immediately.
+                  </div>
+                </div>
+
+                <!-- Job Description Input (Right Column) -->
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label fw-bold mb-0">
+                      <i class="fa-solid fa-briefcase text-primary me-2"></i>2. Job Description
+                    </label>
+                    <span class="badge bg-body-secondary text-secondary fs-xs">Optional</span>
+                  </div>
+
+                  <!-- Role Presets Dropdown / Quick Buttons -->
+                  <div class="mb-2">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="fs-xs text-secondary fw-semibold">Quick Presets:</span>
+                      <button type="button" class="btn btn-link btn-sm p-0 fs-xs text-decoration-none text-danger" id="clearJdBtn">
+                        <i class="fa-solid fa-eraser me-1"></i>Clear
+                      </button>
+                    </div>
+                    <div class="preset-scroll-container d-flex gap-1 pb-1">
+                      <button type="button" class="btn btn-xs preset-btn" data-preset="fullstack">💻 Full Stack</button>
+                      <button type="button" class="btn btn-xs preset-btn" data-preset="python">🐍 Python / Backend</button>
+                      <button type="button" class="btn btn-xs preset-btn" data-preset="frontend">⚛️ React / Frontend</button>
+                      <button type="button" class="btn btn-xs preset-btn" data-preset="ai">🤖 AI / Data Scientist</button>
+                      <button type="button" class="btn btn-xs preset-btn" data-preset="devops">☁️ DevOps</button>
+                      <button type="button" class="btn btn-xs preset-btn" data-preset="uiux">🎨 UI/UX</button>
+                    </div>
+                  </div>
+
+                  <div class="position-relative">
+                    <textarea class="form-control custom-textarea" id="jobDescription" rows="6" placeholder="Paste the target job description or requirements here to calculate exact match percentage & skill gaps..."></textarea>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-1">
+                    <span class="fs-xs text-secondary" id="jdCharCount">0 words</span>
+                    <span class="fs-xs text-secondary">Tip: Match against actual job post for best results</span>
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="col-12 text-center pt-2">
+                  <button type="submit" class="btn btn-primary btn-lg px-5 py-3 shadow-primary rounded-pill submit-btn" id="submitBtn">
+                    <span class="d-flex align-items-center justify-content-center gap-2">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i>
+                      <span>Analyze Resume & Match Gaps</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Scanning / Loading State -->
+        <div id="loadingBox" class="text-center my-5 py-5 glass-card rounded-4 d-none">
+          <div class="scanner-container mx-auto mb-4">
+            <div class="radar-scan"></div>
+            <i class="fa-solid fa-microchip scanner-icon text-primary"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Analyzing Resume with AI Engine...</h4>
+          <p class="text-secondary fs-sm mb-3" id="loadingStatusText">Extracting keywords and skills from document...</p>
+          <div class="progress loading-progress mx-auto" style="height: 6px; max-width: 320px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary w-100"></div>
+          </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="errorBox" class="alert alert-danger glass-card border-danger shadow-sm mt-4 d-none d-flex align-items-center gap-3">
+          <i class="fa-solid fa-triangle-exclamation fs-3 text-danger"></i>
+          <div>
+            <h6 class="fw-bold mb-1">Analysis Notice</h6>
+            <div id="errorMessage">Something went wrong.</div>
+          </div>
+        </div>
+
+        <!-- Results Dashboard Section -->
+        <div id="resultsBox" class="mt-4 d-none results-section">
+          
+          <!-- Top Control Header -->
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+            <div>
+              <h3 class="fw-bold mb-1">
+                <i class="fa-solid fa-square-poll-vertical text-primary me-2"></i>Analysis Report
+              </h3>
+              <p class="text-secondary fs-sm mb-0">Detailed breakdown of skills, match compatibility, ATS score, and AI tools.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-gradient-ai btn-sm" id="openCoverLetterBtn" data-bs-toggle="modal" data-bs-target="#coverLetterModal">
+                <i class="fa-solid fa-envelope-open-text me-1"></i> AI Cover Letter
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="copySummaryBtn" title="Copy text summary to clipboard">
+                <i class="fa-solid fa-copy me-1"></i> Copy Summary
+              </button>
+              <button type="button" class="btn btn-outline-primary btn-sm" id="printReportBtn" title="Print or save as PDF">
+                <i class="fa-solid fa-print me-1"></i> Print / PDF
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" id="newAnalysisBtn">
+                <i class="fa-solid fa-rotate-left me-1"></i> New Analysis
+              </button>
+            </div>
+          </div>
+
+          <!-- Top Metric Cards Grid -->
+          <div class="row g-3 mb-4">
+            
+            <!-- Match Score Card -->
+            <div class="col-md-5 col-lg-4" id="matchGaugeCard">
+              <div class="card glass-card h-100 border-0 p-3 text-center position-relative overflow-hidden">
+                <span class="fs-xs fw-bold text-uppercase text-secondary tracking-wider mb-2 d-block">Overall Match Score</span>
+                
+                <!-- Circular Score Gauge -->
+                <div class="score-circle-wrapper mx-auto my-2">
+                  <svg class="score-ring" viewBox="0 0 120 120">
+                    <circle class="score-ring-bg" cx="60" cy="60" r="50" />
+                    <circle class="score-ring-fill" id="scoreRingFill" cx="60" cy="60" r="50" />
+                  </svg>
+                  <div class="score-text-inside">
+                    <span class="score-number fw-extrabold" id="scoreNumber">0%</span>
+                    <span class="score-label fs-xs text-secondary">Match Rate</span>
+                  </div>
+                </div>
+
+                <!-- Grade Badge -->
+                <div class="mt-2">
+                  <span class="badge grade-badge" id="matchGradeBadge">Grade: N/A</span>
+                </div>
+                <p class="fs-xs text-secondary mt-2 mb-0" id="matchSubtext">Based on target job description</p>
+              </div>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="col-md-7 col-lg-8">
+              <div class="row g-3 h-100">
+                
+                <div class="col-6 col-sm-6">
+                  <div class="card stat-card glass-card border-0 p-3 h-100">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="stat-icon bg-primary-subtle text-primary">
+                        <i class="fa-solid fa-list-check"></i>
+                      </div>
+                      <div>
+                        <div class="stat-val fw-bold fs-4" id="totalSkillsCount">0</div>
+                        <div class="text-secondary fs-xs">Resume Skills Found</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6 col-sm-6">
+                  <div class="card stat-card glass-card border-0 p-3 h-100">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="stat-icon bg-success-subtle text-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                      </div>
+                      <div>
+                        <div class="stat-val fw-bold fs-4 text-success" id="matchedSkillsCount">0</div>
+                        <div class="text-secondary fs-xs">Matching Skills</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6 col-sm-6">
+                  <div class="card stat-card glass-card border-0 p-3 h-100">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="stat-icon bg-warning-subtle text-warning">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                      </div>
+                      <div>
+                        <div class="stat-val fw-bold fs-4 text-warning" id="missingSkillsCount">0</div>
+                        <div class="text-secondary fs-xs">Missing Skills</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6 col-sm-6">
+                  <div class="card stat-card glass-card border-0 p-3 h-100">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="stat-icon bg-info-subtle text-info">
+                        <i class="fa-solid fa-file-lines"></i>
+                      </div>
+                      <div>
+                        <div class="stat-val fw-bold fs-4" id="resumeWordCount">0</div>
+                        <div class="text-secondary fs-xs">Words (<span id="readTimeVal">~1 min</span>)</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ATS Health & Impact Breakdown Card -->
+          <div class="card glass-card border-0 mb-4">
+            <div class="card-body p-4">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <h5 class="fw-bold mb-0">
+                  <i class="fa-solid fa-chart-line text-success me-2"></i>ATS Health & Impact Breakdown
+                </h5>
+                <span class="badge bg-success-subtle text-success border border-success-subtle fs-xs">Multi-Factor ATS Audit</span>
+              </div>
+
+              <div class="row g-4">
+                <!-- Action Verbs -->
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fs-sm fw-semibold"><i class="fa-solid fa-bolt text-warning me-1"></i> Power Action Verbs (<span id="actionVerbsCount">0</span> found)</span>
+                    <span class="fs-xs text-secondary" id="actionVerbsScore">0%</span>
+                  </div>
+                  <div class="progress mb-2" style="height: 8px;">
+                    <div class="progress-bar bg-warning" id="actionVerbsBar" style="width: 0%;"></div>
+                  </div>
+                  <div class="d-flex flex-wrap gap-1" id="actionVerbsContainer">
+                    <!-- Action verb tags -->
+                  </div>
+                </div>
+
+                <!-- Measurable Impact & Metrics -->
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fs-sm fw-semibold"><i class="fa-solid fa-arrow-trend-up text-info me-1"></i> Quantifiable Metrics (<span id="impactMetricsCount">0</span> found)</span>
+                    <span class="fs-xs text-secondary" id="impactMetricsScore">0%</span>
+                  </div>
+                  <div class="progress mb-2" style="height: 8px;">
+                    <div class="progress-bar bg-info" id="impactMetricsBar" style="width: 0%;"></div>
+                  </div>
+                  <div class="d-flex flex-wrap gap-1" id="impactMetricsContainer">
+                    <!-- Impact metric badges -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Keyword Density Strip -->
+              <div class="mt-3 pt-3 border-top">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="fs-xs fw-semibold text-secondary text-uppercase tracking-wider">Top Keyword Frequencies:</span>
+                </div>
+                <div class="d-flex flex-wrap gap-1" id="keywordDensityContainer">
+                  <!-- Keyword chips -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Detectors -->
+          <div class="card glass-card border-0 p-3 mb-4" id="sectionsDetectCard">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="fw-semibold fs-sm text-secondary">Key Resume Sections Detected:</span>
+              <div class="d-flex flex-wrap gap-2" id="sectionsBadgesContainer">
+                <span class="badge bg-body-tertiary border text-secondary" id="badgeExp"><i class="fa-solid fa-circle-notch me-1"></i> Experience</span>
+                <span class="badge bg-body-tertiary border text-secondary" id="badgeProj"><i class="fa-solid fa-circle-notch me-1"></i> Projects</span>
+                <span class="badge bg-body-tertiary border text-secondary" id="badgeEdu"><i class="fa-solid fa-circle-notch me-1"></i> Education</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skill Gap Matrix Card -->
+          <div class="card glass-card border-0 mb-4">
+            <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <h5 class="fw-bold mb-0">
+                  <i class="fa-solid fa-tags text-primary me-2"></i>Skill Breakdown & Matrix
+                </h5>
+                
+                <!-- Search Skills Input -->
+                <div class="skill-search-box">
+                  <i class="fa-solid fa-magnifying-glass text-secondary"></i>
+                  <input type="text" id="skillSearchInput" class="form-control form-control-sm skill-search-field" placeholder="Filter skills...">
+                </div>
+              </div>
+
+              <!-- Filter Tabs -->
+              <ul class="nav nav-pills mt-3 filter-tabs gap-2" id="skillTabs" role="tablist">
+                <li class="nav-item">
+                  <button class="nav-link active" data-filter="all">All Skills (<span id="tabCountAll">0</span>)</button>
+                </li>
+                <li class="nav-item" id="tabMatchedItem">
+                  <button class="nav-link" data-filter="matched">✅ Matched (<span id="tabCountMatched">0</span>)</button>
+                </li>
+                <li class="nav-item" id="tabMissingItem">
+                  <button class="nav-link" data-filter="missing">⚠️ Missing (<span id="tabCountMissing">0</span>)</button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" data-filter="resume-only">💼 Resume Only (<span id="tabCountResume">0</span>)</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-body p-4">
+              <div id="skillsContainer" class="d-flex flex-wrap gap-2 min-h-60">
+                <!-- Badges dynamically rendered here -->
+              </div>
+              <div id="noSkillsMatchNotice" class="text-center py-4 text-secondary d-none">
+                <i class="fa-solid fa-filter-circle-xmark fs-2 mb-2"></i>
+                <p class="mb-0">No skills match the current search or filter.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Bullet Point Enhancer Card -->
+          <div class="card glass-card border-0 mb-4" id="bulletEnhancerCard">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="fw-bold mb-0">
+                  <i class="fa-solid fa-wand-magic-sparkles text-primary me-2"></i>AI Resume Bullet Point Enhancer
+                </h5>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-xs">ATS Impact Formula</span>
+              </div>
+              <p class="text-secondary fs-sm mb-3">Transform standard bullet points into high-impact, metrics-driven statements that get noticed by recruiters:</p>
+              <div class="bullet-enhancement-list d-flex flex-column gap-3" id="bulletEnhancementsContainer">
+                <!-- Enhanced bullets rendered dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Actionable AI Recommendations Card -->
+          <div class="card glass-card border-0 mb-4">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="fw-bold mb-0">
+                  <i class="fa-solid fa-lightbulb text-warning me-2"></i>Actionable AI Recommendations
+                </h5>
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-xs">Optimization Tips</span>
+              </div>
+              <div class="suggestions-grid" id="suggestionsContainer">
+                <!-- Suggestions rendered here -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- AI Cover Letter Modal -->
+  <div class="modal fade" id="coverLetterModal" tabindex="-1" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content glass-card border-0">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title fw-bold" id="coverLetterModalLabel">
+            <i class="fa-solid fa-envelope-open-text text-primary me-2"></i>AI Tailored Cover Letter Generator
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fs-xs fw-bold text-secondary text-uppercase">Target Job Title</label>
+              <input type="text" class="form-control form-control-sm custom-input" id="coverLetterJobTitle" value="Software Engineer" placeholder="e.g. Full Stack Developer">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fs-xs fw-bold text-secondary text-uppercase">Company Name</label>
+              <input type="text" class="form-control form-control-sm custom-input" id="coverLetterCompany" value="Hiring Team" placeholder="e.g. Google, Tech Innovations">
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="form-label fs-xs fw-bold text-secondary text-uppercase mb-0">Generated Cover Letter</label>
+            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3" id="regenerateCoverLetterBtn">
+              <i class="fa-solid fa-arrows-rotate me-1"></i> Regenerate
+            </button>
+          </div>
+          
+          <textarea class="form-control cover-letter-textarea" id="coverLetterText" rows="12" placeholder="Click Generate to craft your customized cover letter..."></textarea>
+        </div>
+        <div class="modal-footer border-top-0 pt-0 d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" id="downloadCoverLetterBtn">
+              <i class="fa-solid fa-download me-1"></i> Download .txt
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="copyCoverLetterBtn">
+              <i class="fa-solid fa-copy me-1"></i> Copy Cover Letter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works Modal -->
+  <div class="modal fade" id="howItWorksModal" tabindex="-1" aria-labelledby="howItWorksLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card border-0">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title fw-bold" id="howItWorksLabel">
+            <i class="fa-solid fa-brain text-primary me-2"></i>How AI Resume Analyzer Works
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div class="d-flex flex-column gap-3">
+            <div class="d-flex gap-3">
+              <div class="modal-step-icon">1</div>
+              <div>
+                <h6 class="fw-bold mb-1">Resume Text & Structure Extraction</h6>
+                <p class="text-secondary fs-sm mb-0">We parse PDF/DOCX resumes safely using dedicated extractors to extract skills, sections, and vocabulary.</p>
+              </div>
+            </div>
+            <div class="d-flex gap-3">
+              <div class="modal-step-icon">2</div>
+              <div>
+                <h6 class="fw-bold mb-1">Skill Gap & Keyword Comparison</h6>
+                <p class="text-secondary fs-sm mb-0">The engine scans for technical skills, tools, frameworks, and soft skills, cross-referencing your resume with the job description.</p>
+              </div>
+            </div>
+            <div class="d-flex gap-3">
+              <div class="modal-step-icon">3</div>
+              <div>
+                <h6 class="fw-bold mb-1">ATS Match Scoring & Recommendations</h6>
+                <p class="text-secondary fs-sm mb-0">You receive a calculated match score, a list of missing keywords, and tailored suggestions to strengthen your application.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 pt-0">
+          <button type="button" class="btn btn-primary w-100 rounded-pill" data-bs-dismiss="modal">Got it, let's analyze!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification for Copy -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="actionToast" class="toast glass-card border-0 text-body" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex align-items-center p-3">
+        <i class="fa-solid fa-circle-check text-success fs-4 me-3"></i>
+        <div class="toast-body p-0 fw-semibold" id="toastMessage">Summary copied to clipboard!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 border-top text-secondary fs-xs">
+    <div class="container">
+      <p class="mb-1">Powered by <strong>FastAPI</strong> & <strong>AI Resume Analyzer</strong></p>
+      <p class="mb-0 text-muted">Designed for candidates, recruiters, and career growth.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="/static/script.js"></script>
+</body>
+</html>
